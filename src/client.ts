@@ -1,7 +1,7 @@
 import { SovereigntyViolation, StreamInterrupted, VoltError, fromStatus } from "./errors.js";
 import type { VoltMeta } from "./types.js";
 
-export const DEFAULT_BASE_URL = "https://api.volt.cloud";
+export const DEFAULT_BASE_URL = "https://api.voltcloud.ai";
 
 export type FetchLike = typeof fetch;
 

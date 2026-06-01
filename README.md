@@ -1,6 +1,6 @@
 # Volt TypeScript SDK
 
-TypeScript SDK for [Volt](https://volt.cloud) — the Sovereign Inference Cloud.
+TypeScript SDK for [Volt](https://voltcloud.ai) — the Sovereign Inference Cloud.
 OpenAI drop-in for Spark, with first-class sovereign tier, metro pinning, and pod
 affinity.
 
