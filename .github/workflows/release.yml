@@ -1,0 +1,62 @@
+# Release @thevoltcloud/sdk to npm on a version tag.
+# Build -> SLSA L3 provenance (org reusable workflow) -> npm publish with
+# provenance (OIDC).
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      digests: ${{ steps.hash.outputs.digests }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm run build
+      - run: npm pack
+      - name: Hash tarball for provenance
+        id: hash
+        run: echo "digests=$(sha256sum *.tgz | base64 -w0)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-tarball
+          path: "*.tgz"
+
+  provenance:
+    needs: [build]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: thevoltcloud/.github/.github/workflows/shared-slsa-provenance.yml@main
+    with:
+      base64-subjects: ${{ needs.build.outputs.digests }}
+
+  publish:
+    needs: [build, provenance]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # npm provenance
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

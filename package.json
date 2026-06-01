@@ -1,0 +1,28 @@
+{
+  "name": "@thevoltcloud/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for Volt — the Sovereign Inference Cloud. OpenAI drop-in for Spark.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Volt <platform@volt.cloud>",
+  "homepage": "https://volt.cloud",
+  "repository": { "type": "git", "url": "https://github.com/thevoltcloud/sdk-typescript.git" },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "keywords": ["volt", "llm", "inference", "sovereign", "openai-compatible"],
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5.5",
+    "vitest": "^2"
+  }
+}
